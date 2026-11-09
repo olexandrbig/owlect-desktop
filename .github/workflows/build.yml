@@ -1,11 +1,13 @@
 name: Build
 
-# Manual runs build all three platforms and attach the installers as workflow
-# artifacts. Pushing a tag like v1.0.0 also uploads them to a draft GitHub
-# Release (publish it by hand). Builds are unsigned by decision; see README.
+# Every branch push (and manual run) builds all three platforms and attaches
+# the installers as workflow artifacts. Pushing a tag like v1.0.0 also uploads
+# them to a draft GitHub Release (publish it by hand). Builds are unsigned by
+# decision; see README.
 on:
   workflow_dispatch:
   push:
+    branches: ["**"]
     tags: ["v*"]
 
 permissions:
