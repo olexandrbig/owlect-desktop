@@ -35,7 +35,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: macos-15
+          # Intel runner: GitHub's Apple Silicon macOS pool was capacity-constrained
+          # (jobs sat unacquired for 15 min). It still builds the universal DMG.
+          - os: macos-15-intel
             target: mac
           - os: windows-latest
             target: win
