@@ -12,9 +12,7 @@ files:
 protocols:
   - name: Owlect
     schemes: [owlect]
-# Hardening fuses, flipped in the binary right before signing. enableCookieEncryption
-# changes the on-disk cookie store format one way (fine before v1.0.0 ships: a
-# signed-in tester just signs in again). onlyLoadAppFromAsar needs asar packaging,
+# Hardening fuses, flipped in the binary right before signing. onlyLoadAppFromAsar needs asar packaging,
 # which is electron-builder's default.
 electronFuses:
   runAsNode: false
@@ -22,7 +20,11 @@ electronFuses:
   enableNodeCliInspectArguments: false
   enableEmbeddedAsarIntegrityValidation: true
   onlyLoadAppFromAsar: true
-  enableCookieEncryption: true
+  # Off while builds are unsigned: the key lives in the macOS Keychain and is tied
+  # to the app's signature, and every ad-hoc build is a new signature, so each
+  # update would ask the user to allow "Owlect Safe Storage" (Deny = signed out).
+  # Turn it on together with Developer ID signing.
+  enableCookieEncryption: false
   # offline.html is the only file: page, and it needs none of file:'s extra powers.
   grantFileProtocolExtraPrivileges: false
 publish:
