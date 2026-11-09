@@ -1,0 +1,31 @@
+{
+  "name": "owlect-desktop",
+  "productName": "Owlect",
+  "version": "1.0.0",
+  "description": "Owlect for Mac and Windows: the collection tracker at owlect.app in its own window.",
+  "homepage": "https://owlect.app/download",
+  "author": "Owlect <support@owlect.app>",
+  "license": "MIT",
+  "private": true,
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc -p . && node -e \"require('fs').copyFileSync('src/offline.html','dist/offline.html')\"",
+    "start": "pnpm build && electron .",
+    "dev": "pnpm build && OWLECT_URL=http://localhost:3000 electron .",
+    "typecheck": "tsc -p . --noEmit",
+    "test": "node scripts/run-tests.mjs",
+    "dist:mac": "pnpm build && electron-builder --mac --publish never",
+    "dist:win": "pnpm build && electron-builder --win --publish never",
+    "release": "pnpm build && electron-builder --publish always",
+    "dist:linux": "pnpm build && electron-builder --linux --publish never"
+  },
+  "dependencies": {
+    "electron-updater": "6.8.11"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "electron": "44.9.3",
+    "electron-builder": "26.18.0",
+    "typescript": "5.9.3"
+  }
+}

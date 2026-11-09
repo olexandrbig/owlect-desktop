@@ -1,0 +1,7 @@
+# pnpm settings for this single-package repo.
+# electron downloads its binary in a postinstall script, so it must be allowed
+# to run it. `onlyBuiltDependencies` is the pnpm 10 key, `allowBuilds` the pnpm 11 one.
+onlyBuiltDependencies:
+  - electron
+allowBuilds:
+  electron: true

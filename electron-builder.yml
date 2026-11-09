@@ -1,0 +1,71 @@
+# Unsigned builds by decision (no paid licences for now). See
+# docs/desktop-app/plan.md in the main Owlect repo, Approach 5.
+appId: app.owlect.desktop
+productName: Owlect
+copyright: Copyright © Owlect
+directories:
+  output: release
+  buildResources: build
+files:
+  - dist/**/*
+  - package.json
+protocols:
+  - name: Owlect
+    schemes: [owlect]
+# Hardening fuses, flipped in the binary right before signing. enableCookieEncryption
+# changes the on-disk cookie store format one way (fine before v1.0.0 ships: a
+# signed-in tester just signs in again). onlyLoadAppFromAsar needs asar packaging,
+# which is electron-builder's default.
+electronFuses:
+  runAsNode: false
+  enableNodeOptionsEnvironmentVariable: false
+  enableNodeCliInspectArguments: false
+  enableEmbeddedAsarIntegrityValidation: true
+  onlyLoadAppFromAsar: true
+  enableCookieEncryption: true
+  # offline.html is the only file: page, and it needs none of file:'s extra powers.
+  grantFileProtocolExtraPrivileges: false
+publish:
+  provider: github
+  owner: olexandrbig
+  repo: owlect-desktop
+  # A tag build creates a draft; publish it by hand after checking the files.
+  releaseType: draft
+
+mac:
+  target:
+    - target: dmg
+      arch: [universal]
+  category: public.app-category.lifestyle
+  # "-" = ad-hoc signature: free, and required for Apple Silicon to run the app.
+  # Switching to Developer ID later: set identity, hardenedRuntime: true,
+  # notarize: true and entitlements with com.apple.security.device.camera.
+  identity: "-"
+  hardenedRuntime: false
+  notarize: false
+  minimumSystemVersion: "12.0"
+  extendInfo:
+    NSCameraUsageDescription: Owlect uses the camera to scan barcodes when you add items.
+dmg:
+  artifactName: Owlect-mac.${ext}
+
+win:
+  target:
+    - target: nsis
+      arch: [x64, arm64]
+nsis:
+  oneClick: true
+  perMachine: false
+  artifactName: Owlect-Setup.${ext}
+
+linux:
+  target:
+    - target: AppImage
+      arch: [x64]
+    - target: deb
+      arch: [x64]
+  category: Utility
+  synopsis: Collection tracker
+  description: Owlect, the collection tracker at owlect.app, in its own window.
+  maintainer: Owlect <support@owlect.app>
+  artifactName: Owlect-linux-${arch}.${ext}
